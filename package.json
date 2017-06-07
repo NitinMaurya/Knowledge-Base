@@ -1,0 +1,22 @@
+{
+  "name": "knowledgebase",
+  "version": "1.0.0",
+  "description": "This module keeps information about multiple users and their posts and comments.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Nitin Maurya",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.17.2",
+    "crypto-js": "^3.1.9-1",
+    "express": "^4.15.3",
+    "jsonwebtoken": "^7.4.1",
+    "sequelize": "^3.30.4",
+    "sqlite3": "^3.1.8",
+    "underscore": "^1.8.3"
+  }
+}

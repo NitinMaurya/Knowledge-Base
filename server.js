@@ -7,6 +7,7 @@ var bodyParser = require ('body-parser');
 var _ = require('underscore');
 var db = require ('./db.js');
 var middleware = require('./middleware.js')(db);
+var cors = require('cors');
 
 
 var app = express();
@@ -14,6 +15,7 @@ var app = express();
 var port = process.env.PORT || 8000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 /*
 -----------------------------------------------------------------------------------------------------------
@@ -22,7 +24,7 @@ app.use(bodyParser.json());
 */
 
 //Get all Posts
-app.get ('/posts', function (req,res){
+app.get ('/users/posts', function (req,res){
     db.posts.findAll({
                 where: {
                     id: {
@@ -38,7 +40,7 @@ app.get ('/posts', function (req,res){
 
 
 //get all comments related to post
-app.get ('/comments/:id', function (req,res){
+app.get ('/users/comments/:id', function (req,res){
     var postId = parseInt(req.params.id,10);
     db.comments.findAll({
         where: {
@@ -52,7 +54,7 @@ app.get ('/comments/:id', function (req,res){
 });
 
 
-//Get User
+//Get User and all its data
 app.get('/users/:id',middleware.requireAuthentication, function(req, res) {
     var userId = parseInt(req.params.id,10);
     if(userId != req.user.id){
@@ -86,7 +88,7 @@ app.get('/users/:id',middleware.requireAuthentication, function(req, res) {
 -------------------------------------------------------------------------------------------------------------
 */
 //Submit posts
-app.post ('/posts',middleware.requireAuthentication,function (req,res){
+app.post ('/users/posts',middleware.requireAuthentication,function (req,res){
     var body = _.pick(req.body,'description','title','url');
     db.posts.create(body).then(function (post){
         req.user.addPosts(post).then(function (){
@@ -131,7 +133,7 @@ app.post('/users/login',function(req,res){
 });
 
 //Submit comments
-app.post ('/comments/:id',function (req,res){
+app.post ('/users/comments/:id',function (req,res){
     var body = _.pick(req.body,'description');
     db.comments.create(body).then(function (comment) {
                 req.user.addComments(comment).then(function () {
